@@ -1,0 +1,31 @@
+.invoice-container {
+  width: 40%;
+  float: right;
+  padding: 20px;
+  margin-top: 60px;
+}
+
+.invoice-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.invoice-table th,
+.invoice-table td {
+  border: 2px solid #535353;
+  padding: 8px;
+}
+
+.invoice-table th {
+  background-color: #ddd;
+}
+
+@media screen and (max-width: 700px) {
+  .invoice-container {
+    width: 90%;
+    float: none;
+    padding: 20px;
+    margin-top: 60px;
+  }
+}

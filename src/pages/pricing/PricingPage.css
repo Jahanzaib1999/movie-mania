@@ -1,0 +1,89 @@
+.pricing-page {
+  text-align: center;
+  padding: 50px;
+  overflow: hidden;
+}
+
+.subtitle {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 50px;
+}
+
+.billing-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 50px;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+}
+
+.toggle-text {
+  margin: 0 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.toggle-text-selected {
+  font-weight: bold;
+}
+
+.subtitle {
+  color: var(--primary-color);
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+h2 {
+  color: var(--primary-color);
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+
+h5 {
+  color: grey;
+  font-size: 14px;
+  margin-bottom: 40px;
+}
+.pricing-cards {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 50px;
+}
+
+.proceed-button {
+  background-color: green;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 12px 30px;
+  text-align: center;
+  font-size: 16px;
+  cursor: pointer;
+  display: inline-block;
+  margin: auto 20px auto auto;
+}
+
+.invoice-section {
+  display: table;
+  float: right;
+  margin-top: 60px;
+  margin-right: 20px;
+  padding: 20px;
+  background-color: white;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  box-shadow: 2px 2px 10px lightgray;
+}
+
+.button-section {
+  clear: both;
+  margin-top: 40px;
+  display: block;
+}

@@ -1,0 +1,113 @@
+/* .home-page {
+  display: flex;
+  max-height: max-content;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  background-color: var(--background-color);
+}
+
+.home-page h1 {
+  margin: 50px 0;
+  color: var(--primary-color);
+}
+
+.popular-movies,
+.upcoming-movies,
+.popular-tv-series {
+  margin-top: 50px;
+  text-align: left;
+}
+
+.section-title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  text-transform: uppercase;
+}
+
+p {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.popular-movies-container {
+  overflow-x: auto;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  padding: 20px;
+}
+
+.popular-movies-header {
+  margin-bottom: 20px;
+}
+
+.movie-cards-container {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.movie-card {
+  margin-right: 20px;
+  flex-shrink: 0;
+}
+
+.section-header {
+  margin: 20px 0;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+} */
+
+.home-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--background-color);
+  overflow-x: hidden;
+}
+
+.section-header {
+  font-size: 36px;
+  margin-bottom: 40px;
+  text-align: center;
+  color: var(--primary-color);
+  margin: 60px;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.popular-movies-container,
+.top-rated-movies-container,
+.popular-tv-shows-container,
+.top-rated-tv-shows-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-x: hidden;
+  margin-bottom: 50px;
+}
+
+.movie-cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+
+@media (max-width: 1000px) {
+  .section-header {
+    font-size: 30px;
+    margin-bottom: 40px;
+    margin: 60px;
+  }
+}
+
+@media (max-width: 768px) {
+}
