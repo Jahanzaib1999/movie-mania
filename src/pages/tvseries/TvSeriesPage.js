@@ -5,11 +5,14 @@ import useTmdb from "../../hooks/useTmdb";
 
 export default function TvSeriesPage() {
   const [selectedTvCategory, setSelectedTvCategory] = useState(
-    localStorage.getItem("selectedTvCategory") || "on_the_air" || "top_rated"
+    localStorage.getItem("selectedTvCategory") ||
+      "on_the_air" ||
+      "top_rated" ||
+      "All Tv Shows"
   );
   const [page, setPage] = useState(parseInt(localStorage.getItem("page")) || 1);
   const [selectedTvGenre, setSelectedTvGenre] = useState(
-    JSON.parse(localStorage.getItem("selectedTvGenre")) || {}
+    JSON.parse(localStorage.getItem("selectedTvGenre")) || null
   );
 
   const [showGenreDropdown, setShowGenreDropdown] = useState(false);
@@ -30,7 +33,15 @@ export default function TvSeriesPage() {
     data: tvData,
     loading: tvLoading,
     error: tvError,
-  } = useTmdb(`/discover/tv`, `page=${page}&with_genres=${selectedTvGenre.id}`);
+  } = useTmdb(
+    `/discover/tv`,
+    `page=${page}${
+      selectedTvGenre !== null && selectedTvGenre !== undefined
+        ? `&with_genres=${selectedTvGenre?.id}`
+        : ""
+    }
+`
+  );
 
   function handleNextPageClick() {
     setPage(page + 1);
@@ -94,20 +105,20 @@ export default function TvSeriesPage() {
           </div>
           <div
             className={`category-item-tv genre-category ${
-              selectedTvCategory === "Genre" ? "active" : ""
+              selectedTvCategory === "All Tv Shows" ? "active" : ""
             }`}
             onClick={() => {
               setShowGenreDropdown(!showGenreDropdown);
-              setSelectedTvCategory("Genre");
+              setSelectedTvCategory("All Tv Shows");
               setPage(1);
             }}
           >
-            Genre
+            All TV Shows
           </div>
         </div>
       </div>
 
-      {selectedTvCategory === "Genre" && (
+      {/* {selectedTvCategory === "All Tv Shows" && (
         <div className="genre-dropdown-container">
           {showGenreDropdown && (
             <div className="genre-dropdown">
@@ -139,19 +150,20 @@ export default function TvSeriesPage() {
               : selectedTvGenre.name}
           </div>
         </div>
-      )}
+      )} */}
 
       <div className="tv-section">
         {selectedTvCategory === "on_the_air" && (
           <>
             <div className="tv-list">
-              {onAirLoading ? (
-                <div>Loading...</div>
-              ) : (
-                onAirData.results.map((movie) => (
-                  <MovieCard key={movie.id} movie={movie} />
-                ))
-              )}
+              {!onAirLoading &&
+                onAirData?.results?.map((movie) => (
+                  <MovieCard
+                    key={movie.id}
+                    movie={movie}
+                    isLoading={onAirLoading}
+                  />
+                ))}
             </div>
           </>
         )}
@@ -159,28 +171,31 @@ export default function TvSeriesPage() {
         {selectedTvCategory === "top_rated" && (
           <>
             <div className="tv-list">
-              {topRatedLoading ? (
-                <div>Loading...</div>
-              ) : (
-                topRatedData.results.map((movie) => (
-                  <MovieCard key={movie.id} movie={movie} />
-                ))
-              )}
+              {!topRatedLoading &&
+                topRatedData?.results?.map((movie) => (
+                  <MovieCard
+                    key={movie.id}
+                    movie={movie}
+                    isLoading={topRatedLoading}
+                  />
+                ))}
             </div>
           </>
         )}
 
-        {selectedTvCategory === "Genre" && selectedTvGenre && (
+        {selectedTvCategory === "All Tv Shows" && (
           <>
             <h1>{selectedTvGenre.name}</h1>
             <div className="tv-list">
-              {tvLoading ? (
-                <div>Loading...</div>
-              ) : (
-                tvData.results.map((movie) => (
-                  <MovieCard key={movie.id} movie={movie} />
-                ))
-              )}
+              {!tvLoading &&
+                !tvError &&
+                tvData?.results?.map((movie) => (
+                  <MovieCard
+                    key={movie.id}
+                    movie={movie}
+                    isLoading={tvLoading}
+                  />
+                ))}
             </div>
           </>
         )}

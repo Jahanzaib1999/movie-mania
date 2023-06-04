@@ -14,12 +14,13 @@
   flex-direction: column;
   align-items: center;
   width: 300px;
-  aspect-ratio: 3/5;
+  min-height: fit-content;
   margin: 20px;
   box-shadow: 0px 0px 10px 2px lightgray;
   border-radius: 10px;
   position: relative;
   transition: transform 0.3s ease-in-out;
+  overflow: hidden;
 }
 
 .poster-container {
@@ -27,6 +28,7 @@
   height: 80%;
   text-align: center;
   justify-content: center;
+  aspect-ratio: 3/5;
 }
 
 .poster-container img {
@@ -35,7 +37,6 @@
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   object-fit: cover;
-  aspect-ratio: 3/5;
 }
 
 .info-container {
@@ -112,6 +113,7 @@
 @media (max-width: 1000px) {
   .movie-card-container {
     width: 200px;
+    height: auto;
   }
 
   .info-container {

@@ -136,9 +136,4 @@
   .tv-header {
     flex-direction: column;
   }
-
-  .tv-list {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-  }
 }

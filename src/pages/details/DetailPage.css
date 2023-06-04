@@ -1,11 +1,40 @@
 .movie-detail-page {
-  background-size: cover;
-  height: 90vh;
+  width: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
   font-family: sans-serif;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 50vh;
+}
+
+.movie-backdrop {
+  display: flex;
+  background-size: cover;
+  aspect-ratio: 1300/732;
+  width: 100%;
+  position: relative;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.movie-poster {
+  position: absolute;
+  top: 110%;
+  left: 18%;
+  transform: translate(-50%, -50%);
+  width: 20%;
+  aspect-ratio: 590/885;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+  z-index: 10;
+  border-radius: 5px;
+  border: 3px solid var(--primary-color);
 }
 
 .loading {
@@ -14,7 +43,408 @@
   color: #fff;
 }
 
-.details-container,
+.details-container {
+  background-color: #f5f5f5;
+  width: 84%;
+  border-radius: 10px;
+  display: flex;
+}
+
+.title {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  left: 32%;
+  padding-right: 9%;
+  height: fit-content;
+}
+
+.heading {
+  font-size: 2rem;
+  text-align: left;
+  margin-bottom: 0;
+}
+
+.detail-body {
+  padding-top: 30%;
+  display: flex;
+  width: 100%;
+  position: relative;
+  flex-direction: column;
+}
+
+.genres-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  align-self: flex-start;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.genre {
+  color: #fff;
+  background-color: #343a40;
+  border-radius: 50px;
+  padding: 8px 16px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.heading {
+  font-size: 2rem;
+  text-align: left;
+  margin-bottom: 0;
+}
+
+.overview {
+}
+
+.text-body {
+  font-size: 1.25rem;
+  margin-bottom: 20px;
+  line-height: 1.5;
+  text-align: justify;
+}
+
+.vote-date-time-div {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.divider {
+  height: 50px;
+  width: 2px;
+  background-color: #000;
+}
+
+.vote-average {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.country-list {
+  font-size: 1.25rem;
+  text-align: left;
+}
+
+.companies-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.company {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #8e9caa;
+  border-radius: 8px;
+  padding: 10px;
+  margin-top: 20px;
+  margin-right: 10px;
+  width: 120px;
+  height: 120px;
+}
+
+.company-name {
+  color: #fff;
+  font-size: 1rem;
+  text-align: center;
+  margin: 5px 0;
+}
+
+.company-logo {
+  width: 80%;
+  max-height: 50px;
+  object-fit: contain;
+  margin: 5px 0;
+}
+
+.season-episode-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: center;
+  justify-content: space-evenly;
+  background-color: rgba(85, 76, 217, 0.5);
+  padding: 20px;
+  border: 3px solid #343a40;
+  border-radius: 10px;
+  margin-top: 50px;
+}
+
+.season-dropdown,
+.episode-dropdown {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.season-dropdown h2,
+.episode-dropdown h2 {
+  margin: 0;
+}
+
+.season-dropdown select,
+.episode-dropdown select {
+  background-color: #555;
+  color: #fff;
+  padding: 14px;
+  border: none;
+  border-radius: 3px;
+  margin-right: 10px;
+  margin-left: 20px;
+  min-width: 200px;
+}
+
+.season-dropdown select:hover,
+.episode-dropdown select:hover {
+  background-color: #777;
+  cursor: pointer;
+}
+
+.episode-card {
+  display: block;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 10px;
+  border: 3px solid #343a40;
+  background-color: rgba(85, 76, 217, 0.5);
+  padding: 20px;
+  margin-top: 50px;
+}
+
+.episode-details {
+  padding-right: 10px;
+}
+
+.airdate-runtime {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  background-color: #343a40;
+  color: #fff;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.airdate,
+.runtime {
+  margin: 0 20px;
+}
+
+.episode-overview {
+  margin-bottom: 10px;
+}
+
+.crew-list {
+  height: 270px;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.crew-list::-webkit-scrollbar {
+  width: 12px;
+  background-color: #f5f5f5;
+  border-radius: 10px;
+}
+
+.crew-list::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #343a40;
+  border-radius: 10px;
+}
+
+.similar-content-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+
+.similar-content h2 {
+  margin: 30px 0;
+}
+
+.crew-list {
+  margin-top: 40px;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.review-container {
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 80%;
+  height: fit-content;
+  display: flex;
+  margin: 0 auto;
+}
+
+.review-container::-webkit-scrollbar {
+  width: 12px;
+  background-color: #f5f5f5;
+  border-radius: 10px;
+}
+
+.review-container::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #343a40;
+  border-radius: 10px;
+}
+
+.review-input-container {
+  display: flex;
+  flex-direction: column;
+  width: 82%;
+  margin: 0 auto;
+}
+
+.review-label {
+  display: flex;
+  margin-bottom: 10px;
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin: 20px 0;
+}
+
+.review-text-area {
+  width: 100%;
+  padding: 10px 5px;
+  resize: none;
+  margin-bottom: 30px;
+  align-items: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.review-input-number {
+  width: 100%;
+  padding: 15px 5px;
+  margin-bottom: 40px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.review-input-container .rating-error {
+  color: red;
+  margin-bottom: 10px;
+}
+
+.review-input-container button {
+  padding: 14px 28px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 30%;
+  margin: 0 auto;
+}
+
+.review-input-container button:disabled {
+  background-color: lightgray;
+  cursor: not-allowed;
+}
+
+.review-input-container .success-msg {
+  color: green;
+  margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+  .heading {
+    font-size: 1.5rem;
+  }
+  .genre {
+    padding: 5px 10px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    font-size: 14px;
+  }
+  .detail-body {
+    padding-top: 40%;
+  }
+  .vote-date-time-div {
+    font-size: 1rem;
+  }
+  .divider {
+    height: 40px;
+  }
+  .text-body {
+    font-size: 1rem;
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+  .season-dropdown select,
+  .episode-dropdown select {
+    background-color: #555;
+    color: #fff;
+    padding: 12px;
+    min-width: 180px;
+  }
+  .details-container {
+    width: 86%;
+  }
+  .review-input-container button {
+    padding: 10px 20px;
+    width: 60%;
+  }
+}
+
+@media (max-width: 500px) {
+  .heading {
+    font-size: 1rem;
+  }
+  .genre {
+    padding: 4px 8px;
+    margin-right: 6px;
+    margin-bottom: 6px;
+    font-size: 10px;
+  }
+  .detail-body {
+    padding-top: 45%;
+  }
+  .vote-date-time-div {
+    font-size: 0.7rem;
+  }
+  .divider {
+    height: 30px;
+  }
+  .text-body {
+    font-size: 0.75rem;
+    margin-bottom: 14px;
+  }
+  .season-dropdown select,
+  .episode-dropdown select {
+    background-color: #555;
+    color: #fff;
+    padding: 10px;
+    min-width: 150px;
+  }
+  .details-container {
+    width: 90%;
+  }
+  .review-input-container button {
+    padding: 10px 20px;
+    width: 80%;
+  }
+}
+
+/* .details-container,
 .review-container {
   background-color: rgba(0, 0, 0, 0.5);
   padding: 20px;
@@ -27,7 +457,7 @@
   overflow-x: hidden;
   overflow-y: scroll;
   margin-right: 30px;
-}
+} */
 
 /* .review-container {
   display: flex;
@@ -40,7 +470,7 @@
   overflow-y: hidden;
 } */
 
-.review-container h1 {
+/* .review-container h1 {
   margin-bottom: 16px;
 }
 
@@ -166,7 +596,7 @@
     76,
     217,
     0.5
-  ); /* set background color to dark gray */
+  ); 
   padding: 10px;
   border: 4px solid #343a40;
   border-radius: 10px;
@@ -174,14 +604,14 @@
 
 .season-dropdown label,
 .episode-dropdown label {
-  color: #fff; /* set label color to white */
+  color: #fff; 
   margin-right: 5px;
 }
 
 .season-dropdown select,
 .episode-dropdown select {
-  background-color: #555; /* set dropdown background color to medium gray */
-  color: #fff; /* set dropdown text color to white */
+  background-color: #555; 
+  color: #fff; 
   padding: 5px;
   border: none;
   border-radius: 3px;
@@ -190,7 +620,7 @@
 
 .season-dropdown select:hover,
 .episode-dropdown select:hover {
-  background-color: #777; /* set dropdown background color to darker gray on hover */
+  background-color: #777; 
   cursor: pointer;
 }
 
@@ -256,4 +686,4 @@
   padding: 1rem;
   border-radius: 5px;
   text-align: center;
-}
+} */

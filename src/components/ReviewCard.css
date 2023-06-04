@@ -3,7 +3,7 @@
   padding: 20px;
   border-radius: 10px;
   width: 100%;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
 
 .review-header {
@@ -22,7 +22,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 24px;
+  font-size: 1.5rem;
   color: white;
   margin-bottom: 10px;
   margin-right: 5px;
@@ -34,12 +34,8 @@
 }
 
 .review-date {
-  font-size: 14px;
+  font-size: 1rempx;
   color: gray;
-}
-
-.review-text {
-  margin-top: 10px;
 }
 
 .review-input {
@@ -73,4 +69,9 @@
 
 .review-login-button {
   margin-left: 20px;
+}
+
+.review-content {
+  margin-top: 10px;
+  text-overflow: ellipsis;
 }

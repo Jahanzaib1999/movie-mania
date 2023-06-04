@@ -3,11 +3,14 @@ import { useState, useEffect } from "react";
 import "./DetailedMovieCard.css";
 import { Link } from "react-router-dom";
 import useTmdb from "../hooks/useTmdb";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
-const DetailedMovieCard = ({ movie }) => {
+const DetailedMovieCard = ({ movie, isLoading }) => {
   const [isTvShow, setIsTvShow] = useState(false);
   const [genres, setGenres] = useState([]);
   const [shortOverview, setShortOverview] = useState("");
+  const [delayedLoading, setDelayedLoading] = useState(true);
 
   const { data: genreData, loading: genreLoading } =
     useTmdb("/genre/movie/list");
@@ -32,6 +35,13 @@ const DetailedMovieCard = ({ movie }) => {
     const firstFiftyWords = movie.overview.split(" ").slice(0, 50).join(" ");
     setShortOverview(firstFiftyWords);
   }, [genreData, genreLoading, movie]);
+
+  // useEffect(() => {
+  //   const delayTimer = setTimeout(() => {
+  //     setDelayedLoading(isLoading);
+  //   }, 2000);
+  //   return () => clearTimeout(delayTimer);
+  // }, [isLoading]);
 
   return (
     <div className="wrapper">
@@ -65,6 +75,7 @@ const DetailedMovieCard = ({ movie }) => {
             </Link>
           </div>
         </div>
+
         <div className="card_right">
           <div className="img_container">
             <img
@@ -72,6 +83,7 @@ const DetailedMovieCard = ({ movie }) => {
               alt={isTvShow ? movie.name : movie.title}
             />
           </div>
+
           <div className="play_btn">
             <Link
               to={`/movie/${movie.id}`}

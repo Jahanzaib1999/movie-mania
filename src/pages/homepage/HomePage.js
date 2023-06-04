@@ -88,7 +88,10 @@ export default function HomePage() {
             <h2 className="section-header">Popular Movies</h2>
 
             {!moviePopularLoading && !moviePopularError && (
-              <SwipeableGallery movies={moviePopularData.results} />
+              <SwipeableGallery
+                movies={moviePopularData.results}
+                isLoading={moviePopularLoading}
+              />
             )}
           </div>
         </>
@@ -100,7 +103,10 @@ export default function HomePage() {
             <h2 className="section-header">Top rated movies</h2>
 
             {!movieTopRatedLoading && !movieTopRatedError && (
-              <SwipeableGallery movies={movieTopRatedData.results} />
+              <SwipeableGallery
+                movies={movieTopRatedData.results}
+                isLoading={movieTopRatedLoading}
+              />
             )}
           </div>
         </>
@@ -134,7 +140,10 @@ export default function HomePage() {
             <h2 className="section-header">Popular TV Shows</h2>
 
             {!tvPopularLoading && !tvPopularError && (
-              <SwipeableGallery movies={tvPopularData.results} />
+              <SwipeableGallery
+                movies={tvPopularData.results}
+                isLoading={tvPopularLoading}
+              />
             )}
           </div>
         </>
@@ -146,7 +155,10 @@ export default function HomePage() {
             <h2 className="section-header">Top rated TV Shows</h2>
 
             {!tvTopRatedLoading && !tvTopRatedError && (
-              <SwipeableGallery movies={tvTopRatedData.results} />
+              <SwipeableGallery
+                movies={tvTopRatedData.results}
+                isLoading={tvTopRatedLoading}
+              />
             )}
           </div>
         </>

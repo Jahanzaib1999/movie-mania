@@ -3,6 +3,8 @@ import MovieCard from "../../components/MovieCard";
 import useTmdb from "../../hooks/useTmdb";
 import "./MoviesPage.css";
 
+import { FaFilter } from "react-icons/fa";
+
 // function MoviesPage() {
 //   const [selectedCategory, setSelectedCategory] = useState("now_playing");
 //   const [page, setPage] = useState(1);
@@ -172,18 +174,28 @@ import "./MoviesPage.css";
 // A FEW MOVIES PER PAGE WOULD BELONG TO A GENRE SELECTED
 // BY THE USER
 
+// JSON.parse(localStorage.getItem("selectedGenre")) ||
+
+// ${
+//   selectedGenre !== null && selectedGenre !== undefined
+//     ? `&with_genres=${selectedGenre?.id}`
+//     : ""
+// }
+
 function MoviesPage() {
-  const [selectedGenre, setSelectedGenre] = useState(
-    JSON.parse(localStorage.getItem("selectedGenre")) || null
+  const [selectedGenreList, setSelectedGenre] = useState(
+    JSON.parse(localStorage.getItem("selectedGenreList")) || []
   );
   const [selectedCategory, setSelectedCategory] = useState(
     localStorage.getItem("selectedCategory") ||
       "now_playing" ||
       "top_rated" ||
-      "Genre"
+      "All Movies"
   );
   const [showGenreDropdown, setShowGenreDropdown] = useState(false);
   const [page, setPage] = useState(parseInt(localStorage.getItem("page")) || 1);
+
+  const [FiltersMenuExpanded, setFiltersMenuExpanded] = useState(false);
 
   const { data: genreData, loading: genreLoading } =
     useTmdb("/genre/movie/list");
@@ -202,8 +214,17 @@ function MoviesPage() {
     error: movieError,
   } = useTmdb(
     `/discover/movie`,
-    `page=${page}&with_genres=${selectedGenre?.id || ""}`
+    `page=${page}${
+      selectedGenreList !== null && selectedGenreList !== undefined
+        ? `&with_genres=${selectedGenreList?.id}`
+        : ""
+    }
+  `
   );
+
+  function toggleFiltersMenu() {
+    setFiltersMenuExpanded(!FiltersMenuExpanded);
+  }
 
   function handleNextPageClick() {
     setPage(page + 1);
@@ -218,8 +239,11 @@ function MoviesPage() {
   useEffect(() => {
     localStorage.setItem("selectedCategory", selectedCategory);
     localStorage.setItem("page", page);
-    localStorage.setItem("selectedGenre", JSON.stringify(selectedGenre));
-  }, [selectedCategory, page, selectedGenre]);
+    localStorage.setItem(
+      "selectedGenreList",
+      JSON.stringify(selectedGenreList)
+    );
+  }, [selectedCategory, page, selectedGenreList]);
 
   useEffect(() => {
     const container = movieListRef.current;
@@ -268,111 +292,143 @@ function MoviesPage() {
           </div>
           <div
             className={`category-item-movie genre-category ${
-              selectedCategory === "Genre" ? "active" : ""
+              selectedCategory === "All Movies" ? "active" : ""
             }`}
             onClick={() => {
+              setSelectedCategory("All Movies");
               setShowGenreDropdown(!showGenreDropdown);
-              setSelectedCategory("Genre");
               setPage(1);
             }}
           >
-            Genre
+            All Movies
           </div>
         </div>
       </div>
 
-      {/* {showGenreDropdown && (
-        <div className="genre-dropdown">
-          {genreLoading ? (
-            <div>Loading...</div>
-          ) : (
-            genreData.genres.map((genre) => (
-              <div
-                className="genre-dropdown-item"
-                key={genre.id}
-                onClick={() => {
-                  setSelectedGenre(genre);
-                  setSelectedCategory("Genre");
-                  setShowGenreDropdown(false);
-                }}
-              >
-                {genre.name}
+      {selectedCategory === "All Movies" && (
+        <div
+          className={`filters-menu ${
+            FiltersMenuExpanded ? "filters-menu-expanded" : ""
+          }`}
+          onClick={toggleFiltersMenu}
+        >
+          <FaFilter /> Filters
+          {FiltersMenuExpanded && (
+            <div className="filters-dropdown">
+              <div className="filter-section">
+                <h3>Genre</h3>
+                <div className="filter-options">
+                  {genreLoading ? (
+                    <div>Loading genres...</div>
+                  ) : (
+                    genreData.genres.map((genre) => (
+                      <label>
+                        <input type="checkbox" />
+                        <span>{genre.name}</span>
+                      </label>
+                    ))
+                  )}
+                </div>
               </div>
-            ))
+
+              <div className="filter-section">
+                <h3>Year</h3>
+                <div className="filter-options">
+                  {/* Render year filter options */}
+                </div>
+              </div>
+
+              <div className="filter-section">
+                <h3>Rating</h3>
+                <div className="filter-options">
+                  {/* Render rating filter options */}
+                </div>
+              </div>
+
+              <div className="apply-filters-button">
+                <button>Apply Filters</button>
+              </div>
+            </div>
           )}
         </div>
-      )} */}
+      )}
 
-      {selectedCategory === "Genre" && (
+      {/* {selectedCategory === "All Movies" && (
         <div className="genre-dropdown-container">
-          {showGenreDropdown && (
+          {showGenreDropdown ? (
             <div className="genre-dropdown">
               {genreLoading ? (
                 <div className="genre-loading">Loading...</div>
               ) : (
-                genreData.genres.map((genre) => (
-                  <div
-                    className="genre-dropdown-item"
-                    key={genre.id}
-                    onClick={() => {
-                      setSelectedGenre(genre);
-                      setSelectedCategory("Genre");
-                      setShowGenreDropdown(false);
-                    }}
-                  >
-                    {genre.name}
-                  </div>
-                ))
+                <>
+                  <div className="placeholder">Select Genre</div>
+                  {genreData?.genres.map((genre) => (
+                    <div
+                      className="genre-dropdown-item"
+                      key={genre.id}
+                      onClick={() => {
+                        setSelectedGenre(genre);
+                        setShowGenreDropdown(false);
+                      }}
+                    >
+                      {genre.name}
+                    </div>
+                  ))}
+                </>
               )}
             </div>
+          ) : (
+            <div
+              className="selected-genre"
+              onClick={() => setShowGenreDropdown(true)}
+            >
+              {selectedGenre ? selectedGenre.name : "Select Genre"}
+            </div>
           )}
-          <div
-            className="selected-genre"
-            onClick={() => setShowGenreDropdown(!showGenreDropdown)}
-          >
-            {selectedGenre.name === null ? "Select Genre" : selectedGenre.name}
-          </div>
         </div>
-      )}
+      )} */}
 
       <div className="movies-section">
         {selectedCategory === "now_playing" && (
           <>
             <div className="movies-list">
-              {nowPlayingLoading ? (
-                <div>Loading...</div>
-              ) : (
-                nowPlayingData.results.map((movie) => (
-                  <MovieCard key={movie.id} movie={movie} />
-                ))
-              )}
+              {!nowPlayingLoading &&
+                nowPlayingData?.results?.map((movie) => (
+                  <MovieCard
+                    key={movie.id}
+                    movie={movie}
+                    isLoading={nowPlayingLoading}
+                  />
+                ))}
             </div>
           </>
         )}
         {selectedCategory === "top_rated" && (
           <>
             <div className="movies-list">
-              {topRatedLoading ? (
-                <div>Loading...</div>
-              ) : (
-                topRatedData.results.map((movie) => (
-                  <MovieCard key={movie.id} movie={movie} />
-                ))
-              )}
+              {!topRatedLoading &&
+                topRatedData?.results?.map((movie) => (
+                  <MovieCard
+                    key={movie.id}
+                    movie={movie}
+                    isLoading={topRatedLoading}
+                  />
+                ))}
             </div>
           </>
         )}
-        {selectedCategory === "Genre" && selectedGenre && (
+        {selectedCategory === "All Movies" && (
           <>
-            <h1>{selectedGenre.name}</h1>
+            <h1>{selectedGenreList.name}</h1>
             <div className="movies-list">
-              {movieLoading ? (
-                <div>Loading...</div>
-              ) : (
-                movieData.results.map((movie) => (
-                  <MovieCard key={movie.id} movie={movie} />
-                ))
-              )}
+              {!movieLoading &&
+                movieData?.results?.map((movie) => (
+                  <MovieCard
+                    key={movie.id}
+                    movie={movie}
+                    isLoading={movieLoading}
+                  />
+                ))}
             </div>
           </>
         )}

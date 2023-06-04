@@ -80,6 +80,7 @@ export default function LoginPage() {
                 placeholder="Enter your email"
                 value={loginEmail}
                 onChange={(e) => setLoginEmail(e.target.value)}
+                className="login-page-input"
               />
             </div>
             <div className="form-group">
@@ -89,6 +90,7 @@ export default function LoginPage() {
                 id="login-password"
                 placeholder="Enter your password"
                 value={loginPassword}
+                className="login-page-input"
                 onChange={(e) => setLoginPassword(e.target.value)}
               />
             </div>
@@ -117,6 +119,7 @@ export default function LoginPage() {
               placeholder="Enter your name"
               value={signupName}
               onChange={(e) => setSignupName(e.target.value)}
+              className="login-page-input"
             />
           </div>
           <div className="form-group">
@@ -127,12 +130,14 @@ export default function LoginPage() {
               placeholder="Enter your email"
               value={signupEmail}
               onChange={(e) => setSignupEmail(e.target.value)}
+              className="login-page-input"
             />
           </div>
           <div className="form-group">
             <label htmlFor="password">Password</label>
             <input
               type="password"
+              className="login-page-input"
               id="signup-password"
               placeholder="Enter a password"
               value={signupPassword}
@@ -143,6 +148,7 @@ export default function LoginPage() {
             <label htmlFor="confirmPassword">Confirm Password</label>
             <input
               type="password"
+              className="login-page-input"
               id="signup-confirmPassword"
               placeholder="Confirm your password"
               value={signupConfirmPassword}

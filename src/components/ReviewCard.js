@@ -10,9 +10,9 @@ function ReviewCard({ review }) {
     auth?.currentUser?.uid !== undefined &&
     auth?.currentUser?.uid === review?.userId;
 
-  console.log(auth.currentUser?.uid);
-  console.log(review?.userId);
-  console.log(isCurrentUser);
+  // console.log(auth.currentUser?.uid);
+  // console.log(review?.userId);
+  // console.log(isCurrentUser);
   const cardStyle = {
     border: isCurrentUser
       ? "1px solid rgba(85, 76, 217)"
@@ -33,7 +33,7 @@ function ReviewCard({ review }) {
         <div className="review-date">{review.created_at.slice(0, 4)}</div>
       </div>
       <div className="review-content">
-        {review.content.split(" ").slice(0, 50).join(" ")}
+        {review.content.split(" ").slice(0, 40).join(" ")}
       </div>
     </div>
   );

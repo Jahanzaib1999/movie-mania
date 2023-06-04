@@ -4,7 +4,7 @@ import SwipeableViews from "react-swipeable-views";
 import DetailedMovieCard from "./DetailedMovieCard";
 import "./SwipeableGallery.css";
 
-function SwipeableGallery({ movies }) {
+function SwipeableGallery({ movies, isLoading }) {
   const [index, setIndex] = useState(0);
 
   const handleChangeIndex = (newIndex) => {
@@ -30,7 +30,7 @@ function SwipeableGallery({ movies }) {
         >
           {movies.map((movie) => (
             <div className="swipeable-card-container" key={movie.id}>
-              <DetailedMovieCard movie={movie} />
+              <DetailedMovieCard movie={movie} isLoading={isLoading} />
             </div>
           ))}
         </SwipeableViews>

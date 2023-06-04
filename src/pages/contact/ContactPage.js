@@ -35,7 +35,7 @@ export default function ContactPage() {
       {formSubmitted && <p className="form-submitted">Form Submitted!</p>}
       <h1>Contact Us</h1>
       <form onSubmit={handleSubmit} className="contact-form">
-        <label htmlFor="name">
+        <label htmlFor="name" className="contact-label">
           Name:
           <input
             className="form-input"
@@ -46,7 +46,7 @@ export default function ContactPage() {
             onChange={handleChange}
           />
         </label>
-        <label htmlFor="email">
+        <label htmlFor="email" className="contact-label">
           Email:
           <input
             className="form-input"
@@ -57,7 +57,7 @@ export default function ContactPage() {
             onChange={handleChange}
           />
         </label>
-        <label htmlFor="phone">
+        <label htmlFor="phone" className="contact-label">
           Phone Number:
           <input
             className="form-input"
@@ -68,7 +68,7 @@ export default function ContactPage() {
             onChange={handleChange}
           />
         </label>
-        <label htmlFor="subject">
+        <label htmlFor="subject" className="contact-label">
           Subject:
           <input
             className="form-input"
@@ -79,7 +79,7 @@ export default function ContactPage() {
             onChange={handleChange}
           />
         </label>
-        <label htmlFor="message">
+        <label htmlFor="message" className="contact-label">
           Message:
           <textarea
             id="message"

@@ -2,7 +2,7 @@
   "name": "movie-world",
   "version": "0.1.0",
   "private": true,
-  "public":"public",
+  "public": "public",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.3.0",
     "@fortawesome/free-solid-svg-icons": "^6.3.0",
@@ -11,6 +11,7 @@
     "react": "^18.2.0",
     "react-dom": "^17.0.2",
     "react-icons": "^4.7.1",
+    "react-loading-skeleton": "^3.3.1",
     "react-router-dom": "^6.8.0",
     "react-scripts": "^5.0.1",
     "react-swipeable": "^7.0.0",
