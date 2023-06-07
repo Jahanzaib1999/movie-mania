@@ -4,7 +4,7 @@ import "firebase/compat/auth";
 import "firebase/compat/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCvnGe2IWFEA2dytmmHOXbvxCCUbSlR28k",
+  apiKey: `${process.env.FIREBASE_API_KEY}`,
   authDomain: "movie-mania-18023.firebaseapp.com",
   projectId: "movie-mania-18023",
   storageBucket: "movie-mania-18023.appspot.com",
