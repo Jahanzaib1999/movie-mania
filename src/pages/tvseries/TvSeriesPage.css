@@ -136,4 +136,9 @@
   .tv-header {
     flex-direction: column;
   }
+
+  .category-item-tv {
+    padding: 8px 16px;
+    font-size: 12px;
+  }
 }

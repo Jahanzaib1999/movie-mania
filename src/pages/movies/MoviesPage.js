@@ -183,8 +183,8 @@ import { FaFilter } from "react-icons/fa";
 // }
 
 function MoviesPage() {
-  const [selectedGenreList, setSelectedGenre] = useState(
-    JSON.parse(localStorage.getItem("selectedGenreList")) || []
+  const [selectedGenreList, setSelectedGenreList] = useState(
+    localStorage.getItem("selectedGenreList") || []
   );
   const [selectedCategory, setSelectedCategory] = useState(
     localStorage.getItem("selectedCategory") ||
@@ -192,13 +192,23 @@ function MoviesPage() {
       "top_rated" ||
       "All Movies"
   );
-  const [showGenreDropdown, setShowGenreDropdown] = useState(false);
+
   const [page, setPage] = useState(parseInt(localStorage.getItem("page")) || 1);
 
   const [FiltersMenuExpanded, setFiltersMenuExpanded] = useState(false);
 
+  const [selectedLanguage, setSelectedLanguage] = useState("All");
+
+  const [selectedYear, setSelectedYear] = useState(null);
+
+  const [filteredParams, setFilteredParams] = useState(``);
+
   const { data: genreData, loading: genreLoading } =
     useTmdb("/genre/movie/list");
+
+  const { data: languageData, loading: languageLoading } = useTmdb(
+    "/configuration/languages"
+  );
 
   const { data: nowPlayingData, loading: nowPlayingLoading } = useTmdb(
     `/movie/now_playing`,
@@ -214,13 +224,36 @@ function MoviesPage() {
     error: movieError,
   } = useTmdb(
     `/discover/movie`,
-    `page=${page}${
-      selectedGenreList !== null && selectedGenreList !== undefined
-        ? `&with_genres=${selectedGenreList?.id}`
-        : ""
-    }
+    `page=${page}${filteredParams}
   `
   );
+
+  const applyFilters = () => {
+    let params = "";
+
+    // Apply language filter
+    if (selectedLanguage !== "All") {
+      params += `&with_original_language=${selectedLanguage}`;
+    }
+
+    // Apply year filter
+    if (selectedYear !== "null") {
+      params += `&year=${selectedYear}`;
+    }
+
+    // Apply genre filter
+    const genreIds = Object.keys(selectedGenreList);
+    if (genreIds.length > 0) {
+      const genres = genreIds.join(",");
+      params += `&with_genres=${genres}`;
+    }
+
+    setFilteredParams(params);
+
+    setFiltersMenuExpanded(!FiltersMenuExpanded);
+  };
+
+  //console.log(filteredParams);
 
   function toggleFiltersMenu() {
     setFiltersMenuExpanded(!FiltersMenuExpanded);
@@ -234,6 +267,26 @@ function MoviesPage() {
     setPage(page - 1);
   }
 
+  function handleGenreSelection(genreId) {
+    setSelectedGenreList((prevSelectedGenreList) => {
+      if (prevSelectedGenreList[genreId]) {
+        const updatedGenreList = { ...prevSelectedGenreList };
+        delete updatedGenreList[genreId];
+        return updatedGenreList;
+      } else {
+        return { ...prevSelectedGenreList, [genreId]: true };
+      }
+    });
+  }
+
+  const clearFilters = () => {
+    setSelectedLanguage("All");
+    setSelectedYear("null");
+    setSelectedGenreList({});
+    setFilteredParams("");
+    setFiltersMenuExpanded(!FiltersMenuExpanded);
+  };
+
   const movieListRef = useRef(null);
 
   useEffect(() => {
@@ -241,9 +294,11 @@ function MoviesPage() {
     localStorage.setItem("page", page);
     localStorage.setItem(
       "selectedGenreList",
-      JSON.stringify(selectedGenreList)
+      JSON.stringify(Object.values(selectedGenreList))
     );
   }, [selectedCategory, page, selectedGenreList]);
+
+  //console.log(localStorage.getItem("selectedGenreList"));
 
   useEffect(() => {
     const container = movieListRef.current;
@@ -260,6 +315,10 @@ function MoviesPage() {
     container.scrollTop = parseInt(localStorage.getItem("scrollPosition")) || 0;
   }, []);
 
+  //console.log(selectedGenreList);
+  //console.log(selectedLanguage);
+  //console.log(selectedYear);
+
   return (
     <div className="movies-page" ref={movieListRef}>
       <div className="movies-header">
@@ -272,8 +331,9 @@ function MoviesPage() {
             }`}
             onClick={() => {
               setSelectedCategory("now_playing");
-              setSelectedGenre({});
+              setSelectedGenreList([]);
               setPage(1);
+              setFiltersMenuExpanded(!FiltersMenuExpanded);
             }}
           >
             Now Playing
@@ -284,8 +344,9 @@ function MoviesPage() {
             }`}
             onClick={() => {
               setSelectedCategory("top_rated");
-              setSelectedGenre({});
+              setSelectedGenreList([]);
               setPage(1);
+              setFiltersMenuExpanded(!FiltersMenuExpanded);
             }}
           >
             Top Rated
@@ -296,7 +357,6 @@ function MoviesPage() {
             }`}
             onClick={() => {
               setSelectedCategory("All Movies");
-              setShowGenreDropdown(!showGenreDropdown);
               setPage(1);
             }}
           >
@@ -310,46 +370,128 @@ function MoviesPage() {
           className={`filters-menu ${
             FiltersMenuExpanded ? "filters-menu-expanded" : ""
           }`}
-          onClick={toggleFiltersMenu}
         >
-          <FaFilter /> Filters
-          {FiltersMenuExpanded && (
-            <div className="filters-dropdown">
-              <div className="filter-section">
-                <h3>Genre</h3>
-                <div className="filter-options">
-                  {genreLoading ? (
-                    <div>Loading genres...</div>
-                  ) : (
-                    genreData.genres.map((genre) => (
-                      <label>
-                        <input type="checkbox" />
-                        <span>{genre.name}</span>
-                      </label>
-                    ))
-                  )}
-                </div>
-              </div>
-
-              <div className="filter-section">
-                <h3>Year</h3>
-                <div className="filter-options">
-                  {/* Render year filter options */}
-                </div>
-              </div>
-
-              <div className="filter-section">
-                <h3>Rating</h3>
-                <div className="filter-options">
-                  {/* Render rating filter options */}
-                </div>
-              </div>
-
-              <div className="apply-filters-button">
-                <button>Apply Filters</button>
-              </div>
+          <div>
+            <div className="filter-heading" onClick={toggleFiltersMenu}>
+              <FaFilter /> Filters
             </div>
-          )}
+            {FiltersMenuExpanded && (
+              <div className="filters-dropdown">
+                <div className="filter-section">
+                  <h3>
+                    Genre<span className="select-info">(multi select)</span>
+                  </h3>
+                  <div className="filter-options">
+                    {genreLoading ? (
+                      <div>Loading genres...</div>
+                    ) : (
+                      genreData.genres.map((genre) => (
+                        <label key={genre.id}>
+                          <input
+                            type="checkbox"
+                            checked={!!selectedGenreList[genre.id]}
+                            onChange={() => handleGenreSelection(genre.id)}
+                          />
+
+                          <span>{genre.name}</span>
+                        </label>
+                      ))
+                    )}
+                  </div>
+                </div>
+
+                <div className="filter-section">
+                  <h3>
+                    Year<span className="select-info">(single select)</span>
+                  </h3>
+                  <div className="filter-options">
+                    {Array.from({ length: 5 }, (_, index) => 2023 - index).map(
+                      (year) => (
+                        <label key={year}>
+                          <input
+                            type="radio"
+                            name="year"
+                            value={year.toString()}
+                            checked={selectedYear === year.toString()}
+                            onChange={(e) => setSelectedYear(e.target.value)}
+                          />
+                          <span>{year}</span>
+                        </label>
+                      )
+                    )}
+                    <label>
+                      <input
+                        type="radio"
+                        name="year"
+                        value="older"
+                        checked={selectedYear === "2018"}
+                        onChange={(e) => setSelectedYear("2018")}
+                      />
+                      <span>Older</span>
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="year"
+                        value=""
+                        checked={selectedYear === ""}
+                        onChange={(e) => setSelectedYear(e.target.value)}
+                      />
+                      <span
+                        style={{
+                          backgroundColor: "transparent",
+                          color: "#000",
+                        }}
+                      >
+                        Clear
+                      </span>
+                    </label>
+                  </div>
+                </div>
+
+                <div className="filter-section">
+                  <h3>
+                    Languages
+                    <span className="select-info">(single select)</span>
+                  </h3>
+                  <div className="filter-options">
+                    <select
+                      value={selectedLanguage}
+                      onChange={(e) => setSelectedLanguage(e.target.value)}
+                    >
+                      <option value="All">Select a language</option>
+                      {languageLoading ? (
+                        <option disabled>Loading languages...</option>
+                      ) : (
+                        languageData.map((language) => (
+                          <option
+                            key={language.iso_639_1}
+                            value={language.iso_639_1}
+                          >
+                            {language.english_name}
+                          </option>
+                        ))
+                      )}
+                    </select>
+                  </div>
+                </div>
+
+                {/* <div className="filter-section">
+                  <h3>Rating</h3>
+                  <div className="filter-options"></div>
+                </div> */}
+
+                <div className="apply-filters-button">
+                  <button className="filter-button" onClick={applyFilters}>
+                    Apply Filters
+                  </button>
+                  <button className="clear-button" onClick={clearFilters}>
+                    Clear All
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       )}
 

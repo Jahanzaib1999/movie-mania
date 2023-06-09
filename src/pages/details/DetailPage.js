@@ -387,116 +387,126 @@ function DetailPage() {
               </div>
 
               {isTvShow && (
-                <div className="season-episode-container">
-                  <div className="season-dropdown">
-                    <h2 htmlFor="season-select" className="heading">
-                      Season:
-                    </h2>
-                    <select id="season-select" onChange={handleSeasonSelect}>
-                      <option value="">--Select a season--</option>
-                      {movieLoading && <option disabled>Loading...</option>}
-                      {!movieLoading &&
-                        movieData?.seasons?.map((season) => (
-                          <option key={season.id} value={season.season_number}>
-                            Season {season.season_number}
-                          </option>
-                        ))}
-                    </select>
-                  </div>
-                  {selectedSeason !== null && (
-                    <div className="episode-dropdown">
-                      <h2 className="heading">Episode:</h2>
-                      <select
-                        id="episode-select"
-                        onChange={handleEpisodeSelect}
-                        value={selectedEpisode}
-                      >
-                        {episodeOptions.map((option) => (
-                          <option key={option} value={option}>
-                            Episode {option}
-                          </option>
-                        ))}
+                <>
+                  <h2 className="heading">Seasons & Episodes:</h2>
+                  <div className="season-episode-container">
+                    <div className="season-dropdown">
+                      <h2 htmlFor="season-select" className="heading">
+                        Season:
+                      </h2>
+                      <select id="season-select" onChange={handleSeasonSelect}>
+                        <option value="">--Select a season--</option>
+                        {movieLoading && <option disabled>Loading...</option>}
+                        {!movieLoading &&
+                          movieData?.seasons?.map((season) => (
+                            <option
+                              key={season.id}
+                              value={season.season_number}
+                            >
+                              Season {season.season_number}
+                            </option>
+                          ))}
                       </select>
                     </div>
-                  )}
-                </div>
+                    {selectedSeason !== null && (
+                      <div className="episode-dropdown">
+                        <h2 className="heading">Episode:</h2>
+                        <select
+                          id="episode-select"
+                          onChange={handleEpisodeSelect}
+                          value={selectedEpisode}
+                        >
+                          {episodeOptions.map((option) => (
+                            <option key={option} value={option}>
+                              Episode {option}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
+                  </div>
+                </>
               )}
 
               {selectedEpisode && episodeData && (
-                <div className="episode-card">
-                  <h3>{episodeData.episodes[selectedEpisode - 1].name}</h3>
-                  <div className="episode-details">
-                    <div className="airdate-runtime">
-                      <div className="airdate">
-                        {episodeData.episodes[selectedEpisode - 1].air_date
-                          ? episodeData.episodes[selectedEpisode - 1].air_date
-                          : "N/A"}
+                <>
+                  <h2 className="heading">Details:</h2>
+                  <div className="episode-card">
+                    <h3>{episodeData.episodes[selectedEpisode - 1].name}</h3>
+                    <div className="episode-details">
+                      <div className="airdate-runtime">
+                        <div className="airdate">
+                          {episodeData.episodes[selectedEpisode - 1].air_date
+                            ? episodeData.episodes[selectedEpisode - 1].air_date
+                            : "N/A"}
+                        </div>
+                        <div className="runtime">
+                          {episodeData.episodes[selectedEpisode - 1].runtime
+                            ? `${
+                                episodeData.episodes[selectedEpisode - 1]
+                                  .runtime
+                              } mins`
+                            : "N/A"}
+                        </div>
                       </div>
-                      <div className="runtime">
-                        {episodeData.episodes[selectedEpisode - 1].runtime
-                          ? `${
-                              episodeData.episodes[selectedEpisode - 1].runtime
-                            } mins`
-                          : "N/A"}
-                      </div>
-                    </div>
 
-                    <p className="episode-overview">
-                      {episodeData.episodes[selectedEpisode - 1].overview}
-                    </p>
+                      <p className="episode-overview">
+                        {episodeData.episodes[selectedEpisode - 1].overview}
+                      </p>
 
-                    {episodeData.episodes[selectedEpisode - 1].guest_stars
-                      .length > 0 ||
-                    episodeData.episodes[selectedEpisode - 1].crew.length >
-                      0 ? (
-                      <>
-                        {episodeData.episodes[selectedEpisode - 1].guest_stars
-                          .length > 0 && (
-                          <>
-                            <h3>Cast:</h3>
-                            <div className="crew-list">
-                              {[
-                                ...new Set(
-                                  episodeData.episodes[
+                      {episodeData.episodes[selectedEpisode - 1].guest_stars
+                        .length > 0 ||
+                      episodeData.episodes[selectedEpisode - 1].crew.length >
+                        0 ? (
+                        <>
+                          {episodeData.episodes[selectedEpisode - 1].guest_stars
+                            .length > 0 && (
+                            <>
+                              <h3>Cast:</h3>
+                              <div className="crew-list">
+                                {[
+                                  ...new Set(
+                                    episodeData.episodes[
+                                      selectedEpisode - 1
+                                    ].guest_stars.map((star) => star.id)
+                                  ),
+                                ].map((id) => {
+                                  const star = episodeData.episodes[
                                     selectedEpisode - 1
-                                  ].guest_stars.map((star) => star.id)
-                                ),
-                              ].map((id) => {
-                                const star = episodeData.episodes[
-                                  selectedEpisode - 1
-                                ].guest_stars.find((star) => star.id === id);
-                                return (
-                                  <ProfileCard crew={star} key={star.id} />
-                                );
-                              })}
-                            </div>
-                          </>
-                        )}
-
-                        {episodeData.episodes[selectedEpisode - 1].crew.length >
-                          0 && (
-                          <>
-                            <h3>Crew:</h3>
-                            <div className="crew-list">
-                              {episodeData.episodes[selectedEpisode - 1].crew
-                                .filter((crew, index, arr) => {
+                                  ].guest_stars.find((star) => star.id === id);
                                   return (
-                                    arr.findIndex((c) => c.id === crew.id) ===
-                                    index
+                                    <ProfileCard crew={star} key={star.id} />
                                   );
-                                })
-                                .map((crew) => (
-                                  <ProfileCard crew={crew} key={crew.id} />
-                                ))}
-                            </div>
-                          </>
-                        )}
-                      </>
-                    ) : (
-                      <p>No cast or crew data available</p>
-                    )}
+                                })}
+                              </div>
+                            </>
+                          )}
+
+                          {episodeData.episodes[selectedEpisode - 1].crew
+                            .length > 0 && (
+                            <>
+                              <h3>Crew:</h3>
+                              <div className="crew-list">
+                                {episodeData.episodes[selectedEpisode - 1].crew
+                                  .filter((crew, index, arr) => {
+                                    return (
+                                      arr.findIndex((c) => c.id === crew.id) ===
+                                      index
+                                    );
+                                  })
+                                  .map((crew) => (
+                                    <ProfileCard crew={crew} key={crew.id} />
+                                  ))}
+                              </div>
+                            </>
+                          )}
+                        </>
+                      ) : (
+                        <p>No cast or crew data available</p>
+                      )}
+                    </div>
                   </div>
-                </div>
+                </>
               )}
 
               {!isTvShow && (

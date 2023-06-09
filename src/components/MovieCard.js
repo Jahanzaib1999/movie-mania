@@ -54,7 +54,7 @@ function MovieCard({ movie, isLoading }) {
       </div>
       <div className="info-container">
         {delayedLoading ? (
-          <Skeleton height={30} width={200} c /> // Skeleton with shimmer effect
+          <Skeleton height={30} width={150} c /> // Skeleton with shimmer effect
         ) : isTvShow ? (
           <h3>
             {movie.name?.split(" ").splice(0, 6).join(" ")}{" "}

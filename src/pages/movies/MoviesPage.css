@@ -119,20 +119,148 @@
   display: flex;
   align-self: flex-start;
   align-items: flex-start;
-  cursor: pointer;
+  transition: all 0.5s ease-in-out;
   font-size: 1.25rem;
   border: 1px solid var(--primary-color);
   padding: 10px 20px;
+  margin-bottom: 20px;
 }
 
 .filters-menu-expanded {
-  background-color: #f5f5f5;
+  background-color: rgba(85, 76, 217, 0.25);
+  border-radius: 4px;
+  transition: all 1s ease-in-out;
+}
+
+.filter-heading {
+  cursor: pointer;
+}
+
+.filter-heading svg {
+  margin-right: 2px;
+  font-size: 1rem;
+}
+
+.filter-section {
+  margin-bottom: 16px;
+}
+
+.filter-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.select-info {
+  font-size: 12px;
+  margin-left: 5px;
+}
+
+.filter-options label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.filter-options input[type="checkbox"] {
+  display: none;
+}
+
+.filter-options span {
+  font-size: 14px;
+}
+
+.filter-options input[type="checkbox"] + span {
+  display: inline-block;
+  padding: 8px 12px;
+  border-radius: 20px;
+  background-color: #f2f2f2;
+}
+
+.filter-options input[type="checkbox"]:checked + span {
+  background-color: var(--primary-color);
+  color: #fff;
+  transition: all 0.3s ease-in-out;
+}
+
+.filter-options select {
+  width: 100%;
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
   border-radius: 4px;
 }
 
-.filters-menu svg {
-  margin-right: 4px;
-  font-size: 1.25rem;
+.filter-options select option {
+  font-size: 16px;
+}
+
+.filter-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.filter-options label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.filter-options input[type="radio"] {
+  display: none;
+}
+
+.filter-options span {
+  font-size: 16px;
+}
+
+.filter-options input[type="radio"] + span {
+  display: inline-block;
+  padding: 8px 12px;
+  border-radius: 20px;
+  background-color: #f2f2f2;
+}
+
+.filter-options input[type="radio"]:checked + span {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+.apply-filters-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  text-align: center;
+  margin-top: 26px;
+  margin-bottom: 20px;
+}
+
+.filter-button {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 25px;
+  background-color: var(--primary-color);
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.clear-button {
+  padding: 9px 17px;
+  border: 1px var(--primary-color) solid;
+  border-radius: 25px;
+  background-color: transparent;
+  color: #000;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.filter-button:hover {
+  opacity: 0.8;
 }
 
 /* .genre-selector {
@@ -175,7 +303,7 @@
   .movies-page {
     overflow-x: hidden;
     width: fit-content;
-    padding: 20px;
+    padding: 15px;
   }
 
   .movies-header h1 {
@@ -184,5 +312,10 @@
 
   .movies-header {
     flex-direction: column;
+  }
+
+  .category-item-movie {
+    padding: 8px 16px;
+    font-size: 12px;
   }
 }

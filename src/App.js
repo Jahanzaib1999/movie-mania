@@ -14,6 +14,7 @@ import DetailPage from "./pages/details/DetailPage";
 import { AuthContext } from "./context/AuthContext";
 import { useContext } from "react";
 import SearchPage from "./pages/search/SearchPage";
+import Footer from "./components/Footer";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
           <Route exact path="/movie/:id" element={<DetailPage />} />
           <Route exact path="/search" element={<SearchPage />} />
         </Routes>
+        <Footer />
       </BrowserRouter>
     </div>
   );

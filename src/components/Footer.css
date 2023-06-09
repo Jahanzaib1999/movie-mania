@@ -1,0 +1,149 @@
+.footer-container {
+  padding: 30px 50px;
+  background-color: var(--primary-color);
+  color: #fff;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+}
+
+/* .logo {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+} */
+
+.logo-text {
+  font-size: 18px;
+}
+
+.footer-heading {
+  color: #000;
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.links-container {
+  display: flex;
+  float: left;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.footer-links a {
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer-links a:hover {
+  color: #ccc;
+}
+
+.footer-social {
+  display: flex;
+  font-size: 20px;
+}
+
+.social-link {
+  display: flex;
+  align-items: center;
+  border: 1px solid #fff;
+  border-radius: 25px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.social-link svg {
+  padding: 10px;
+  align-items: center;
+}
+
+.social-link:hover {
+  background-color: #000;
+}
+
+.footer-text {
+  float: right;
+  width: 60%;
+  font-size: 16px;
+}
+
+.second-text {
+  font-style: italic;
+  color: #000;
+}
+
+.footer-logos {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.footer-logos a {
+  display: flex;
+}
+
+.footer-logo {
+  height: 200px;
+}
+
+@media (max-width: 1000px) {
+  .footer-container {
+    padding: 20px 40px;
+    flex-direction: column-reverse;
+  }
+
+  .footer-social {
+    margin-bottom: 50px;
+  }
+
+  .footer-text {
+    float: none;
+    width: 100%;
+    font-size: 16px;
+  }
+
+  .footer-logo {
+    height: 150px;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer-container {
+    padding: 10px 30px;
+    flex-direction: column-reverse;
+  }
+
+  .footer-social {
+    margin-bottom: 50px;
+  }
+
+  .footer-text {
+    float: none;
+    width: 100%;
+    font-size: 14px;
+  }
+
+  .footer-logo {
+    height: 120px;
+  }
+
+  .footer-logos {
+    justify-content: space-around;
+  }
+}

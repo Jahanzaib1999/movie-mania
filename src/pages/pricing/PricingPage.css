@@ -87,3 +87,10 @@ h5 {
   margin-top: 40px;
   display: block;
 }
+
+@media (max-width: 768px) {
+  .billing-toggle {
+    justify-content: center;
+    margin-bottom: 30px;
+  }
+}

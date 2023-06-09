@@ -3,6 +3,8 @@ import MovieCard from "../../components/MovieCard";
 import "./TvSeriesPage.css";
 import useTmdb from "../../hooks/useTmdb";
 
+import { FaFilter } from "react-icons/fa";
+
 export default function TvSeriesPage() {
   const [selectedTvCategory, setSelectedTvCategory] = useState(
     localStorage.getItem("selectedTvCategory") ||
@@ -11,11 +13,21 @@ export default function TvSeriesPage() {
       "All Tv Shows"
   );
   const [page, setPage] = useState(parseInt(localStorage.getItem("page")) || 1);
-  const [selectedTvGenre, setSelectedTvGenre] = useState(
-    JSON.parse(localStorage.getItem("selectedTvGenre")) || null
+  const [selectedGenreList, setSelectedGenreList] = useState(
+    JSON.parse(localStorage.getItem("selectedGenreList")) || []
   );
 
-  const [showGenreDropdown, setShowGenreDropdown] = useState(false);
+  const [FiltersMenuExpanded, setFiltersMenuExpanded] = useState(false);
+
+  const [selectedLanguage, setSelectedLanguage] = useState("All");
+
+  const [selectedYear, setSelectedYear] = useState(null);
+
+  const [filteredParams, setFilteredParams] = useState(``);
+
+  const { data: languageData, loading: languageLoading } = useTmdb(
+    "/configuration/languages"
+  );
 
   const { data: genreData, loading: genreLoading } = useTmdb("/genre/tv/list");
 
@@ -35,13 +47,54 @@ export default function TvSeriesPage() {
     error: tvError,
   } = useTmdb(
     `/discover/tv`,
-    `page=${page}${
-      selectedTvGenre !== null && selectedTvGenre !== undefined
-        ? `&with_genres=${selectedTvGenre?.id}`
-        : ""
-    }
-`
+    `page=${page}${filteredParams}
+  `
   );
+
+  const applyFilters = () => {
+    let params = "";
+
+    // Apply language filter
+    if (selectedLanguage !== "All") {
+      params += `&with_original_language=${selectedLanguage}`;
+    }
+
+    // Apply year filter
+    if (selectedYear !== "null") {
+      params += `&year=${selectedYear}`;
+    }
+
+    // Apply genre filter
+    const genreIds = Object.keys(selectedGenreList);
+    if (genreIds.length > 0) {
+      const genres = genreIds.join(",");
+      params += `&with_genres=${genres}`;
+    }
+
+    setFilteredParams(params);
+
+    setFiltersMenuExpanded(!FiltersMenuExpanded);
+  };
+
+  function handleGenreSelection(genreId) {
+    setSelectedGenreList((prevSelectedGenreList) => {
+      if (prevSelectedGenreList[genreId]) {
+        const updatedGenreList = { ...prevSelectedGenreList };
+        delete updatedGenreList[genreId];
+        return updatedGenreList;
+      } else {
+        return { ...prevSelectedGenreList, [genreId]: true };
+      }
+    });
+  }
+
+  const clearFilters = () => {
+    setSelectedLanguage("All");
+    setSelectedYear("null");
+    setSelectedGenreList({});
+    setFilteredParams("");
+    setFiltersMenuExpanded(!FiltersMenuExpanded);
+  };
 
   function handleNextPageClick() {
     setPage(page + 1);
@@ -51,11 +104,18 @@ export default function TvSeriesPage() {
     setPage(page - 1);
   }
 
+  function toggleFiltersMenu() {
+    setFiltersMenuExpanded(!FiltersMenuExpanded);
+  }
+
   useEffect(() => {
     localStorage.setItem("selectedTvCategory", selectedTvCategory);
     localStorage.setItem("page", page);
-    localStorage.setItem("selectedTvGenre", JSON.stringify(selectedTvGenre));
-  }, [selectedTvCategory, page, selectedTvGenre]);
+    localStorage.setItem(
+      "selectedGenreList",
+      JSON.stringify(Object.values(selectedGenreList))
+    );
+  }, [selectedTvCategory, page, selectedGenreList]);
 
   const tvPageRef = useRef(null);
 
@@ -85,8 +145,9 @@ export default function TvSeriesPage() {
             }`}
             onClick={() => {
               setSelectedTvCategory("on_the_air");
-              setSelectedTvGenre({});
+              setSelectedGenreList([]);
               setPage(1);
+              setFiltersMenuExpanded(!FiltersMenuExpanded);
             }}
           >
             On The Air
@@ -97,8 +158,9 @@ export default function TvSeriesPage() {
             }`}
             onClick={() => {
               setSelectedTvCategory("top_rated");
-              setSelectedTvGenre({});
+              setSelectedGenreList([]);
               setPage(1);
+              setFiltersMenuExpanded(!FiltersMenuExpanded);
             }}
           >
             Top Rated
@@ -108,7 +170,6 @@ export default function TvSeriesPage() {
               selectedTvCategory === "All Tv Shows" ? "active" : ""
             }`}
             onClick={() => {
-              setShowGenreDropdown(!showGenreDropdown);
               setSelectedTvCategory("All Tv Shows");
               setPage(1);
             }}
@@ -152,6 +213,136 @@ export default function TvSeriesPage() {
         </div>
       )} */}
 
+      {selectedTvCategory === "All Tv Shows" && (
+        <div
+          className={`filters-menu ${
+            FiltersMenuExpanded ? "filters-menu-expanded" : ""
+          }`}
+        >
+          <div>
+            <div className="filter-heading" onClick={toggleFiltersMenu}>
+              <FaFilter /> Filters
+            </div>
+            {FiltersMenuExpanded && (
+              <div className="filters-dropdown">
+                <div className="filter-section">
+                  <h3>
+                    Genre<span className="select-info">(multi select)</span>
+                  </h3>
+                  <div className="filter-options">
+                    {genreLoading ? (
+                      <div>Loading genres...</div>
+                    ) : (
+                      genreData.genres.map((genre) => (
+                        <label key={genre.id}>
+                          <input
+                            type="checkbox"
+                            checked={!!selectedGenreList[genre.id]}
+                            onChange={() => handleGenreSelection(genre.id)}
+                          />
+
+                          <span>{genre.name}</span>
+                        </label>
+                      ))
+                    )}
+                  </div>
+                </div>
+
+                <div className="filter-section">
+                  <h3>
+                    Year<span className="select-info">(single select)</span>
+                  </h3>
+                  <div className="filter-options">
+                    {Array.from({ length: 5 }, (_, index) => 2023 - index).map(
+                      (year) => (
+                        <label key={year}>
+                          <input
+                            type="radio"
+                            name="year"
+                            value={year.toString()}
+                            checked={selectedYear === year.toString()}
+                            onChange={(e) => setSelectedYear(e.target.value)}
+                          />
+                          <span>{year}</span>
+                        </label>
+                      )
+                    )}
+                    <label>
+                      <input
+                        type="radio"
+                        name="year"
+                        value="older"
+                        checked={selectedYear === "2018"}
+                        onChange={(e) => setSelectedYear("2018")}
+                      />
+                      <span>Older</span>
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="year"
+                        value=""
+                        checked={selectedYear === ""}
+                        onChange={(e) => setSelectedYear(e.target.value)}
+                      />
+                      <span
+                        style={{
+                          backgroundColor: "transparent",
+                          color: "#000",
+                        }}
+                      >
+                        Clear
+                      </span>
+                    </label>
+                  </div>
+                </div>
+
+                <div className="filter-section">
+                  <h3>
+                    Languages
+                    <span className="select-info">(single select)</span>
+                  </h3>
+                  <div className="filter-options">
+                    <select
+                      value={selectedLanguage}
+                      onChange={(e) => setSelectedLanguage(e.target.value)}
+                    >
+                      <option value="All">Select a language</option>
+                      {languageLoading ? (
+                        <option disabled>Loading languages...</option>
+                      ) : (
+                        languageData.map((language) => (
+                          <option
+                            key={language.iso_639_1}
+                            value={language.iso_639_1}
+                          >
+                            {language.english_name}
+                          </option>
+                        ))
+                      )}
+                    </select>
+                  </div>
+                </div>
+
+                {/* <div className="filter-section">
+                  <h3>Rating</h3>
+                  <div className="filter-options"></div>
+                </div> */}
+
+                <div className="apply-filters-button">
+                  <button className="filter-button" onClick={applyFilters}>
+                    Apply Filters
+                  </button>
+                  <button className="clear-button" onClick={clearFilters}>
+                    Clear All
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       <div className="tv-section">
         {selectedTvCategory === "on_the_air" && (
           <>
@@ -185,7 +376,6 @@ export default function TvSeriesPage() {
 
         {selectedTvCategory === "All Tv Shows" && (
           <>
-            <h1>{selectedTvGenre.name}</h1>
             <div className="tv-list">
               {!tvLoading &&
                 !tvError &&
