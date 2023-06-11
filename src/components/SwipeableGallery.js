@@ -14,12 +14,12 @@ function SwipeableGallery({ movies, isLoading }) {
     }
   };
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     handleChangeIndex((index + 1) % movies.length);
-  //   }, 5500);
-  //   return () => clearInterval(interval);
-  // }, [index, movies.length]);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      handleChangeIndex((index + 1) % movies.length);
+    }, 5500);
+    return () => clearInterval(interval);
+  }, [index, movies.length]);
 
   useEffect(() => {
     const fetchBackdropUrl = async () => {
