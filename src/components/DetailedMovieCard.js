@@ -84,7 +84,7 @@ const DetailedMovieCard = ({ movie, isLoading }) => {
             />
           </div>
 
-          <div className="play_btn">
+          {/* <div className="play_btn">
             <Link
               to={`/movie/${movie.id}`}
               state={{ isTvShow }}
@@ -92,7 +92,7 @@ const DetailedMovieCard = ({ movie, isLoading }) => {
             >
               <i className="fas fa-info-circle"></i>
             </Link>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

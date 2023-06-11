@@ -4,6 +4,7 @@ import useTmdb from "../../hooks/useTmdb";
 import "./MoviesPage.css";
 
 import { FaFilter } from "react-icons/fa";
+import { AiFillCloseCircle } from "react-icons/ai";
 
 // function MoviesPage() {
 //   const [selectedCategory, setSelectedCategory] = useState("now_playing");
@@ -183,9 +184,7 @@ import { FaFilter } from "react-icons/fa";
 // }
 
 function MoviesPage() {
-  const [selectedGenreList, setSelectedGenreList] = useState(
-    localStorage.getItem("selectedGenreList") || []
-  );
+  const [selectedGenreList, setSelectedGenreList] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(
     localStorage.getItem("selectedCategory") ||
       "now_playing" ||
@@ -202,6 +201,8 @@ function MoviesPage() {
   const [selectedYear, setSelectedYear] = useState(null);
 
   const [filteredParams, setFilteredParams] = useState(``);
+
+  const [appliedFilters, setAppliedFilters] = useState([]);
 
   const { data: genreData, loading: genreLoading } =
     useTmdb("/genre/movie/list");
@@ -250,6 +251,30 @@ function MoviesPage() {
 
     setFilteredParams(params);
 
+    const appliedFilters = [];
+
+    if (selectedLanguage !== "All") {
+      appliedFilters.push({ name: "Language", value: selectedLanguage });
+    }
+
+    if (selectedYear !== null && selectedYear !== "null") {
+      appliedFilters.push({ name: "Year", value: selectedYear });
+    }
+
+    if (Object.keys(selectedGenreList).length > 0) {
+      const genreNames = Object.keys(selectedGenreList).map((genreId) => {
+        const genre = genreData.genres.find(
+          (genre) => genre.id === parseInt(genreId)
+        );
+        return genre ? genre.name : "";
+      });
+      appliedFilters.push(
+        ...genreNames.map((name) => ({ name: "Genre", value: name }))
+      );
+    }
+
+    setAppliedFilters(appliedFilters);
+
     setFiltersMenuExpanded(!FiltersMenuExpanded);
   };
 
@@ -285,7 +310,21 @@ function MoviesPage() {
     setSelectedGenreList({});
     setFilteredParams("");
     setFiltersMenuExpanded(!FiltersMenuExpanded);
+    setAppliedFilters([]);
   };
+
+  const resetFilters = () => {
+    setSelectedLanguage("All");
+    setSelectedYear(null);
+    setSelectedGenreList({});
+    setFilteredParams("");
+    setFiltersMenuExpanded(false);
+    setAppliedFilters([]);
+  };
+
+  useEffect(() => {
+    resetFilters();
+  }, []);
 
   const movieListRef = useRef(null);
 
@@ -315,6 +354,25 @@ function MoviesPage() {
     container.scrollTop = parseInt(localStorage.getItem("scrollPosition")) || 0;
   }, []);
 
+  const removeFilter = (index) => {
+    const filter = appliedFilters[index];
+    const updatedFilters = appliedFilters.filter((_, i) => i !== index);
+    setAppliedFilters(updatedFilters);
+
+    if (filter.name === "Language") {
+      setSelectedLanguage("All");
+    } else if (filter.name === "Year") {
+      setSelectedYear(null);
+    } else if (filter.name === "Genre") {
+      const updatedGenreList = { ...selectedGenreList };
+      delete updatedGenreList[filter.value];
+      setSelectedGenreList(updatedGenreList);
+    }
+
+    setFilteredParams("");
+    // setFiltersMenuExpanded(false);
+  };
+
   //console.log(selectedGenreList);
   //console.log(selectedLanguage);
   //console.log(selectedYear);
@@ -331,7 +389,6 @@ function MoviesPage() {
             }`}
             onClick={() => {
               setSelectedCategory("now_playing");
-              setSelectedGenreList([]);
               setPage(1);
               setFiltersMenuExpanded(!FiltersMenuExpanded);
             }}
@@ -344,7 +401,6 @@ function MoviesPage() {
             }`}
             onClick={() => {
               setSelectedCategory("top_rated");
-              setSelectedGenreList([]);
               setPage(1);
               setFiltersMenuExpanded(!FiltersMenuExpanded);
             }}
@@ -366,47 +422,50 @@ function MoviesPage() {
       </div>
 
       {selectedCategory === "All Movies" && (
-        <div
-          className={`filters-menu ${
-            FiltersMenuExpanded ? "filters-menu-expanded" : ""
-          }`}
-        >
-          <div>
-            <div className="filter-heading" onClick={toggleFiltersMenu}>
-              <FaFilter /> Filters
-            </div>
-            {FiltersMenuExpanded && (
-              <div className="filters-dropdown">
-                <div className="filter-section">
-                  <h3>
-                    Genre<span className="select-info">(multi select)</span>
-                  </h3>
-                  <div className="filter-options">
-                    {genreLoading ? (
-                      <div>Loading genres...</div>
-                    ) : (
-                      genreData.genres.map((genre) => (
-                        <label key={genre.id}>
-                          <input
-                            type="checkbox"
-                            checked={!!selectedGenreList[genre.id]}
-                            onChange={() => handleGenreSelection(genre.id)}
-                          />
+        <>
+          <div
+            className={`filters-menu ${
+              FiltersMenuExpanded ? "filters-menu-expanded" : ""
+            }`}
+          >
+            <div>
+              <div className="filter-heading" onClick={toggleFiltersMenu}>
+                <FaFilter /> Filters
+              </div>
+              {FiltersMenuExpanded && (
+                <div className="filters-dropdown">
+                  <div className="filter-section">
+                    <h3>
+                      Genre<span className="select-info">(multi select)</span>
+                    </h3>
+                    <div className="filter-options">
+                      {genreLoading ? (
+                        <div>Loading genres...</div>
+                      ) : (
+                        genreData.genres.map((genre) => (
+                          <label key={genre.id}>
+                            <input
+                              type="checkbox"
+                              checked={!!selectedGenreList[genre.id]}
+                              onChange={() => handleGenreSelection(genre.id)}
+                            />
 
-                          <span>{genre.name}</span>
-                        </label>
-                      ))
-                    )}
+                            <span>{genre.name}</span>
+                          </label>
+                        ))
+                      )}
+                    </div>
                   </div>
-                </div>
 
-                <div className="filter-section">
-                  <h3>
-                    Year<span className="select-info">(single select)</span>
-                  </h3>
-                  <div className="filter-options">
-                    {Array.from({ length: 5 }, (_, index) => 2023 - index).map(
-                      (year) => (
+                  <div className="filter-section">
+                    <h3>
+                      Year<span className="select-info">(single select)</span>
+                    </h3>
+                    <div className="filter-options">
+                      {Array.from(
+                        { length: 5 },
+                        (_, index) => 2023 - index
+                      ).map((year) => (
                         <label key={year}>
                           <input
                             type="radio"
@@ -417,82 +476,96 @@ function MoviesPage() {
                           />
                           <span>{year}</span>
                         </label>
-                      )
-                    )}
-                    <label>
-                      <input
-                        type="radio"
-                        name="year"
-                        value="older"
-                        checked={selectedYear === "2018"}
-                        onChange={(e) => setSelectedYear("2018")}
-                      />
-                      <span>Older</span>
-                    </label>
-                    <label>
-                      <input
-                        type="radio"
-                        name="year"
-                        value=""
-                        checked={selectedYear === ""}
-                        onChange={(e) => setSelectedYear(e.target.value)}
-                      />
-                      <span
-                        style={{
-                          backgroundColor: "transparent",
-                          color: "#000",
-                        }}
+                      ))}
+                      <label>
+                        <input
+                          type="radio"
+                          name="year"
+                          value="older"
+                          checked={selectedYear === "2018"}
+                          onChange={(e) => setSelectedYear("2018")}
+                        />
+                        <span>Older</span>
+                      </label>
+                      <label>
+                        <input
+                          type="radio"
+                          name="year"
+                          value=""
+                          checked={selectedYear === ""}
+                          onChange={(e) => setSelectedYear(e.target.value)}
+                        />
+                        <span
+                          style={{
+                            backgroundColor: "transparent",
+                            color: "#000",
+                          }}
+                        >
+                          Clear
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="filter-section">
+                    <h3>
+                      Languages
+                      <span className="select-info">(single select)</span>
+                    </h3>
+                    <div className="filter-options">
+                      <select
+                        value={selectedLanguage}
+                        onChange={(e) => setSelectedLanguage(e.target.value)}
                       >
-                        Clear
-                      </span>
-                    </label>
+                        <option value="All">Select a language</option>
+                        {languageLoading ? (
+                          <option disabled>Loading languages...</option>
+                        ) : (
+                          languageData.map((language) => (
+                            <option
+                              key={language.iso_639_1}
+                              value={language.iso_639_1}
+                            >
+                              {language.english_name}
+                            </option>
+                          ))
+                        )}
+                      </select>
+                    </div>
                   </div>
-                </div>
 
-                <div className="filter-section">
-                  <h3>
-                    Languages
-                    <span className="select-info">(single select)</span>
-                  </h3>
-                  <div className="filter-options">
-                    <select
-                      value={selectedLanguage}
-                      onChange={(e) => setSelectedLanguage(e.target.value)}
-                    >
-                      <option value="All">Select a language</option>
-                      {languageLoading ? (
-                        <option disabled>Loading languages...</option>
-                      ) : (
-                        languageData.map((language) => (
-                          <option
-                            key={language.iso_639_1}
-                            value={language.iso_639_1}
-                          >
-                            {language.english_name}
-                          </option>
-                        ))
-                      )}
-                    </select>
-                  </div>
-                </div>
-
-                {/* <div className="filter-section">
+                  {/* <div className="filter-section">
                   <h3>Rating</h3>
                   <div className="filter-options"></div>
                 </div> */}
 
-                <div className="apply-filters-button">
-                  <button className="filter-button" onClick={applyFilters}>
-                    Apply Filters
-                  </button>
-                  <button className="clear-button" onClick={clearFilters}>
-                    Clear All
-                  </button>
+                  <div className="apply-filters-button">
+                    <button className="filter-button" onClick={applyFilters}>
+                      Apply Filters
+                    </button>
+                    <button className="clear-button" onClick={clearFilters}>
+                      Clear All
+                    </button>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
-        </div>
+
+          <div className="applied-filters">
+            {appliedFilters.map((filter, index) => (
+              <div className="filter-tag" key={index}>
+                {filter.name}: {filter.value}
+                <button
+                  className="remove-filter-button"
+                  onClick={() => removeFilter(index)}
+                >
+                  <AiFillCloseCircle />
+                </button>
+              </div>
+            ))}
+          </div>
+        </>
       )}
 
       {/* {selectedCategory === "All Movies" && (

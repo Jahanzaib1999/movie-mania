@@ -69,17 +69,20 @@ p {
   align-items: center;
   background-color: var(--background-color);
   overflow-x: hidden;
+  padding-bottom: 100px;
 }
 
 .section-header {
   font-size: 36px;
-  margin-bottom: 40px;
   text-align: center;
   color: var(--primary-color);
-  margin: 60px;
+  margin: 40px;
+  padding: 10px 30px;
+  border-radius: 20px;
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
   font-weight: bold;
   text-transform: uppercase;
+  background-color: #fff;
 }
 
 .popular-movies-container,
@@ -91,7 +94,10 @@ p {
   flex-direction: column;
   align-items: center;
   overflow-x: hidden;
-  margin-bottom: 50px;
+  background-size: contain;
+  background-position: left;
+  background-repeat: repeat;
+  background-blend-mode: soft-light;
 }
 
 .movie-cards-container {
@@ -104,10 +110,14 @@ p {
 @media (max-width: 1000px) {
   .section-header {
     font-size: 30px;
-    margin-bottom: 40px;
-    margin: 60px;
+    margin: 30px;
+    padding: 10px 24px;
   }
 }
 
 @media (max-width: 768px) {
+  .section-header {
+    margin: 20px;
+    padding: 10px 20px;
+  }
 }

@@ -33,7 +33,7 @@ function ReviewCard({ review }) {
         <div className="review-date">{review.created_at.slice(0, 4)}</div>
       </div>
       <div className="review-content">
-        {review.content.split(" ").slice(0, 40).join(" ")}
+        <p>{review.content.split(" ").slice(0, 40).join(" ")}</p>
       </div>
     </div>
   );

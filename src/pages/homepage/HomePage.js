@@ -5,6 +5,8 @@ import React from "react";
 import useTmdb from "../../hooks/useTmdb";
 import SwipeableGallery from "../../components/SwipeableGallery";
 
+import HeaderBg from "../../assets/images/header-bg.jpg";
+
 export default function HomePage() {
   const {
     data: moviePopularData,
@@ -84,7 +86,12 @@ export default function HomePage() {
 
       {!moviePopularLoading && !moviePopularError && (
         <>
-          <div className="popular-movies-container">
+          <div
+            className="popular-movies-container"
+            style={{
+              backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url(${HeaderBg})`,
+            }}
+          >
             <h2 className="section-header">Popular Movies</h2>
 
             {!moviePopularLoading && !moviePopularError && (
@@ -99,7 +106,12 @@ export default function HomePage() {
 
       {!movieTopRatedLoading && !movieTopRatedError && (
         <>
-          <div className="popular-tv-shows-container">
+          <div
+            className="popular-tv-shows-container"
+            style={{
+              backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url(${HeaderBg})`,
+            }}
+          >
             <h2 className="section-header">Top rated movies</h2>
 
             {!movieTopRatedLoading && !movieTopRatedError && (
@@ -136,7 +148,12 @@ export default function HomePage() {
 
       {!tvPopularLoading && !tvPopularError && (
         <>
-          <div className="popular-tv-shows-container">
+          <div
+            className="popular-tv-shows-container"
+            style={{
+              backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url(${HeaderBg})`,
+            }}
+          >
             <h2 className="section-header">Popular TV Shows</h2>
 
             {!tvPopularLoading && !tvPopularError && (
@@ -151,7 +168,12 @@ export default function HomePage() {
 
       {!tvTopRatedLoading && !tvTopRatedError && (
         <>
-          <div className="popular-tv-shows-container">
+          <div
+            className="popular-tv-shows-container"
+            style={{
+              backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url(${HeaderBg})`,
+            }}
+          >
             <h2 className="section-header">Top rated TV Shows</h2>
 
             {!tvTopRatedLoading && !tvTopRatedError && (

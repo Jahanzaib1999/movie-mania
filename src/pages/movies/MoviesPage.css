@@ -134,6 +134,7 @@
 
 .filter-heading {
   cursor: pointer;
+  font-size: 18px;
 }
 
 .filter-heading svg {
@@ -263,6 +264,35 @@
   opacity: 0.8;
 }
 
+.applied-filters {
+  margin-top: 5px;
+  display: flex;
+  align-self: start;
+  gap: 6px;
+}
+
+.filter-tag {
+  display: flex;
+  background-color: rgb(187, 187, 187);
+  padding: 5px 10px;
+  border-radius: 10px;
+  gap: 5px;
+}
+
+.remove-filter-button {
+  background-color: transparent;
+  border: none;
+  color: #000;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.remove-filter-button svg {
+  font-size: 14px;
+}
+
 /* .genre-selector {
   display: flex;
   justify-self: end;
@@ -300,6 +330,16 @@
 }
 
 @media (max-width: 768px) {
+  .filter-heading {
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  .filter-heading svg {
+    margin-right: 2px;
+    font-size: 0.75rem;
+  }
+
   .movies-page {
     overflow-x: hidden;
     width: fit-content;

@@ -13,6 +13,8 @@ import MovieCard from "../../components/MovieCard";
 
 import { AiFillStar } from "react-icons/ai";
 
+import Filter from "bad-words";
+
 function DetailPage() {
   const [endpoint, setEndpoint] = useState("");
   const [reviewEndpoint, setReviewEndpoint] = useState("");
@@ -43,6 +45,20 @@ function DetailPage() {
 
   const handleReviewSubmit = () => {
     const user = auth.currentUser;
+
+    const filter = new Filter();
+
+    if (filter.isProfane(reviewText)) {
+      // Discard the review
+      console.log("Review contains bad words. Discarding...");
+
+      // Inform the user about the issue
+      alert(
+        "Your review contains inappropriate language. Please remove the offensive words."
+      );
+
+      return; // Exit the function without adding the review to the database
+    }
 
     const review = {
       userId: user.uid,
@@ -295,7 +311,7 @@ function DetailPage() {
                   <div className="runtime-main">
                     {isTvShow ? (
                       <p className="runtime-text">
-                        {episodeData && episodeData.episodes.length > 0
+                        {episodeData && episodeData.episodes?.length > 0
                           ? `${calculateAverageRuntime(
                               episodeData.episodes
                             )} mins`

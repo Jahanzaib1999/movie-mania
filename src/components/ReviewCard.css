@@ -72,6 +72,5 @@
 }
 
 .review-content {
-  margin-top: 10px;
-  text-overflow: ellipsis;
+  overflow: hidden;
 }
